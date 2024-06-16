@@ -1,16 +1,17 @@
 import { useState } from "react";
 import EYE_IMAGE from "../../assets/eye.png";
 
-export default function InputComponents(props) {
-  const {
-    label,
-    name,
-    type,
-    onChange,
-    isPassword,
-  } = props;
-  
+// Komponen InputComponents yang menerima beberapa props
+export default function InputComponents({
+  label,
+  name,
+  type,
+  onChange,
+  isPassword,
+  placeholder,
+}) {
   const [showPassword, setShowPassword] = useState(false);
+  // Fungsi mengubah visibilitas password
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -23,13 +24,13 @@ export default function InputComponents(props) {
       >
         {label}
       </label>
-      {isPassword ? (
+      {isPassword ? ( // Mengecek apakah input adalah password?
         <div className="relative w-full">
           <input
-            id="password"
-            name="password"
+            id={name}
+            name={name}
             type={showPassword ? "text" : "password"}
-            placeholder="Enter Your password"
+            placeholder={placeholder ? placeholder : "Enter your password"}
             onChange={onChange}
             className="w-full text-[#321313] py-1 md:py-2 bg-white border border-[#321313] rounded-md p-3 md:p-4  focus:border-indigo-50 "
           />
@@ -41,11 +42,14 @@ export default function InputComponents(props) {
           />
         </div>
       ) : (
+        // Jika bukan password, render input biasa
         <input
           id={name}
           type={type}
           name={name}
-          placeholder="Enter Your username"
+          placeholder={
+            placeholder ? placeholder : `Enter your ${label.toLowerCase()}`
+          }
           onChange={onChange}
           className="w-full text-[#321313] py-1 md:py-2 bg-white border border-[#321313]   rounded-md p-3 md:p-4  focus:border-indigo-500"
         />

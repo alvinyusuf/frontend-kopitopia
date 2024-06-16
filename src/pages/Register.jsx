@@ -2,47 +2,46 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-import { register } from '../api';
 import COFFEE_IMAGE from "../assets/coffe.jpg";
 import LOGO_IMAGE from "../assets/logo.png";
 import InputComponents from "../components/authentication/InputComponents";
+import axios from "../api/axios";
 
 const Register = () => {
   const [user, setUser] = useState({
-    username: '',
-    email: '',
-    password: '',
-  });
+    username: "",
+    email: "",
+    password: "",
+  }); // State untuk menyimpan username, email, dan password
 
   const navigate = useNavigate();
   const handleChange = (e) => {
-    setUser({ 
+    setUser({
       ...user,
-      [e.target.name]: e.target.value
-    })
-  }
+      [e.target.name]: e.target.value,
+    });
+  }; // Fungsi mengubah nilai state user ketika input berubah
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await register(user);
+      const response = await axios.post('/register', user); // Coba registrasi
       Swal.fire({
-        title: 'Success!',
-        text: 'User baru berhasil ditambahkan',
-        icon: 'success',
-        confirmButtonText: 'Ok',
-      });
+        title: "Success!",
+        text: "User baru berhasil ditambahkan",
+        icon: "success",
+        confirmButtonText: "Ok",
+      }); // Menampilkan alert jika registrasi berhasil
       console.log(response);
-      navigate('/');
-
+      navigate("/login"); // Setelah user berhasil registrasi, akan dipindahkan ke halaman login
     } catch (error) {
       Swal.fire({
-        title: 'Error!',
-        text: 'Email atau Password Salah',
-        icon: 'error',
-        confirmButtonText: 'Ok',
-      });
-      console.error('login page', error);
+        title: "Error!",
+        text: "Email atau Password Salah",
+        icon: "error",
+        confirmButtonText: "Ok",
+      }); // Menampilkan alert jika registrasi gagal
+      console.error("login page", error);
     }
   };
 
@@ -63,16 +62,38 @@ const Register = () => {
           </h3>
 
           <form onSubmit={handleSubmit} className="grid gap-4">
-            <InputComponents label={'Username :'} type={'text'} name={'username'} onChange={handleChange} />
+            <InputComponents
+              label={"Username :"}
+              type={"text"}
+              name={"username"}
+              onChange={handleChange}
+              placeholder={"enter your username"}
+            />
 
-            <InputComponents label={'Email :'} type={'email'} name={'email'} onChange={handleChange} />
+            <InputComponents
+              label={"Email :"}
+              type={"email"}
+              name={"email"}
+              onChange={handleChange}
+              placeholder={"enter your email"}
+            />
 
-            <InputComponents label={'Password :'} type={'password'} name={'password'} onChange={handleChange} isPassword={true} />
+            <InputComponents
+              label={"Password :"}
+              type={"password"}
+              name={"password"}
+              onChange={handleChange}
+              isPassword={true}
+              placeholder={"enter your password"}
+            />
 
             <div className="w-full flex items-center justify-between">
               <div className="flex items-center">
                 <input type="checkbox" className="w-4 h-4 mr-2" />
-                <p className="text-xs text-[#321313] md:text-sm"> Remember me </p>
+                <p className="text-xs text-[#321313] md:text-sm">
+                  {" "}
+                  Remember me{" "}
+                </p>
               </div>
               <p className="text-xs md:text-sm font-semibold text-[#321313] ">
                 Forgot your password ?
@@ -80,7 +101,8 @@ const Register = () => {
             </div>
 
             <div className="w-full flex flex-col">
-              <button type="submit"
+              <button
+                type="submit"
                 className="w-full text-white bg-[#591E0A] font-bold rounded-md p-2 md:p-3 text-center flex items-center justify-center"
               >
                 Sign Up
